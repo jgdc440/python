@@ -1,0 +1,98 @@
+Sub burbuja()
+
+'Funcion para ordenar los factores de riesgo de la matriz AR Facilities
+
+'Primero copia los factores y los valores de cartesianos del mapa
+
+'Luego los ordena para colocarlos en el Mapa de Calor
+
+
+'Declaracion de variables
+
+    Dim nVector As Integer
+
+    Dim nAux As Integer
+
+    Dim cAux As String
+
+  'Se define un vector de los elementos a ordenar
+
+    Dim rng() As Integer
+
+    Dim cng() As String
+
+'Calculamos el número de elementos a ordenar
+
+    nVector = Range("B2:B22").Count
+
+'Se redefinen los vectores y la carga con los valores del rango establecido
+
+    ReDim rng(nVector) As Integer
+    
+    ReDim cng(nVector) As String
+
+    For i = 1 To nVector
+
+        rng(i) = Sheets("AR-BOD").Cells(i + 1, 2).Value
+        
+        cng(i) = Sheets("AR-BOD").Cells(i + 1, 3).Value
+
+    Next i
+
+    y = 0
+
+    Do
+
+'Método de Burbuja (siguiendo algoritmo de ordenamiento)
+
+    For i = 1 To nVector
+    
+        For j = i To nVector
+
+            'Ordenamos de menor a mayor
+
+            If rng(i) > rng(j) Then
+
+             ' Primero los nros
+
+               nAux = rng(i)
+
+               rng(i) = rng(j)
+
+               rng(j) = nAux
+
+              ' Luego los str
+
+               cAux = cng(i)
+
+               cng(i) = cng(j)
+
+               cng(j) = cAux
+
+            End If
+        
+        Next j
+
+    Next i
+
+    'Se muestra el resultado de la primera ordenación recorriendo el rango B2:B22
+
+    For x = 2 To nVector + 1
+
+        Sheets("AR-BOD").Cells(x, 2) = rng(x - 1)
+
+        Sheets("AR-BOD").Cells(x, 3) = cng(x - 1)
+
+    Next x
+
+    'Se refresca la pantalla
+
+    Application.ScreenUpdating = True
+
+    y = y + 1
+
+    'Se repetimos tantas veces como elementos se tengan que ordenar
+
+    Loop Until y = nVector
+
+End Sub

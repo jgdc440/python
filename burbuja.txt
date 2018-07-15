@@ -1,0 +1,90 @@
+Sub burbuja()
+
+    Dim nVector As Integer
+
+    Dim nAux As Integer
+
+    'Se define un vector de los elementos a ordenar
+
+    Dim rng() As Integer
+
+    'Calculamos el número de elementos a ordenar
+
+    nVector = Range("B2:B22").Count
+
+    'Se redefine el vector y la carga con los valores del rango B2:B22
+
+    ReDim rng(nVector) As Integer
+
+    For i = 1 To nVector
+
+        rng(i) = Sheets("AR-BOD").Cells(i + 1, 2).Value
+
+    Next i
+
+    y = 0
+
+    Do
+
+    'Método de Burbuja (siguiendo algoritmo de ordenamiento)
+
+    For i = 1 To nVector
+    
+        For j = i To nVector
+
+            'Ordenamos de menor a mayor
+
+            If rng(i) > rng(j) Then
+
+               nAux = rng(i)
+
+               rng(i) = rng(j)
+
+               rng(j) = nAux
+
+            End If
+        
+        Next j
+
+    Next i
+
+'    For i = nVector To 1 Step -1
+    
+'        For j = i To nVector
+
+            'Ordenamos de mayor a menor
+
+'           If rng(i) < rng(j) Then
+
+'               nAux = rng(i)
+
+'               rng(i) = rng(j)
+
+'               rng(j) = nAux
+
+'            End If
+        
+'        Next j
+
+'    Next i
+    
+
+    'Se muestra el resultado de la primera ordenación recorriendo el rango B2:B22
+
+    For x = 2 To nVector + 1
+
+        Sheets("AR-BOD").Cells(x, 2) = rng(x - 1)
+
+    Next x
+
+    'Se refresca la pantalla
+
+    Application.ScreenUpdating = True
+
+    y = y + 1
+
+    'Se repetimos tantas veces como elementos se tengan que ordenar
+
+    Loop Until y = nVector
+
+End Sub

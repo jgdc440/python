@@ -1,0 +1,125 @@
+Sub CargarMapa()
+
+
+'Subrutina para colocar los valores en el mapa de calor
+
+'Obtengo el nombre de la Hoja
+
+   Dim cHoja As String
+
+   cHoja = ActiveSheet.Name
+
+ 'Declaramos las Variables
+
+    Dim i As Integer
+
+    Dim j As Integer
+
+    Dim nRiesgos(25) As Integer
+   
+  'Calculamos la logitud del Vector
+
+    nMayor = 0 'Definira el largo de la fila
+
+    nXY = 0    'Definira el largo de la columna
+    
+    For i = 1 To 21 '21 porque son 21 tipos de Factores de Riesgo
+
+        For j = 1 To 25 '25 porque son 25 posiciones que puede ocupar el riesgo en el mapa
+       
+            If Sheets(cHoja).Cells(j + 2, 8).Value = i Then
+
+                nRiesgos(i) = nRiesgos(i) + 1
+                
+            End If
+
+            If Sheets(cHoja).Cells(j + 2, 8).Value > nXY Then
+
+               nXY = Sheets(cHoja).Cells(j + 2, 8).Value
+
+            End If
+
+        Next j
+        
+        If nRiesgos(i) >= nMayor Then
+
+           nMayor = nRiesgos(i) 'Acumulacion de Riesgos por valor cartesiano
+
+        End If
+
+    Next i
+
+
+  'Ahora definimos la matriz para cargar las coordenadas del Mapa de Calor
+
+    ReDim Mapa(25, 21) As String
+   
+    nCol = 1
+    nFil = 1
+    
+    For i = 1 To 25
+
+
+        For j = 1 To 21
+
+            If Sheets(cHoja).Cells(j + 2, 8).Value = i Then
+                
+
+                Mapa(nCol, nFil) = Sheets(cHoja).Cells(j + 2, 9).Value
+
+                
+                nFil = nFil + 1
+
+
+            End If
+
+        Next j
+
+        nCol = nCol + 1
+
+        nFil = 1
+
+    Next i
+
+  'Determinamos el Nro de la hoja activa
+
+    nHojaActiva = ActiveSheet.Index + 1
+
+
+  'Plasmar el los Riesgos (R#) en el Mapa
+
+    Worksheets(nHojaActiva).Range("D3:H7").ClearContents
+
+    Dim cRiesgos As String
+    
+    nCol = 4
+    nFil = 7
+
+    For i = 1 To 25
+
+        cRiesgos = ""
+
+        For j = 1 To 21
+
+            cRiesgos = cRiesgos + Mapa(i, j) & " "
+       
+       Next j
+
+       
+       Worksheets(nHojaActiva).Cells(nFil, nCol).HorizontalAlignment = xlCenter
+       Worksheets(nHojaActiva).Cells(nFil, nCol).VerticalAlignment = xlCenter
+       Worksheets(nHojaActiva).Cells(nFil, nCol).WrapText = True
+       Worksheets(nHojaActiva).Cells(nFil, nCol).Font.Size = 10
+       Worksheets(nHojaActiva).Cells(nFil, nCol).Value = cRiesgos
+
+       nFil = nFil - 1
+       If nFil = 2 Then
+
+          nFil = 7
+          nCol = nCol + 1
+
+       End If
+       
+    Next i
+
+End Sub

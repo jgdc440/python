@@ -1,0 +1,13 @@
+Sub Graduador()
+'
+' Graduador de Niveles de Riesgo
+
+    Range("C2").Select
+
+    SpinButton1.Max = 5
+    SpinButton1.Min = 0
+
+    SpinButton1.SmallChange = 0.1
+
+    ActiveWorkbook.Save
+End Sub
